@@ -1,0 +1,9 @@
+{
+  "name": "adfree-downloader",
+  "version": "1.0.0",
+  "description": "ZipLootDL Ad-Free Social Media Video Downloader - TikTok, Instagram, Twitter",
+  "private": true,
+  "dependencies": {
+    "instagram-url-direct": "^1.2.2"
+  }
+}
