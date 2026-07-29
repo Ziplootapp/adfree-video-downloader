@@ -7,10 +7,13 @@ import os
 
 PORT = 3000
 DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+os.chdir(DIRECTORY)
 
 class ZipLootHandler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=DIRECTORY, **kwargs)
+    def do_GET(self):
+        if self.path == '/' or self.path == '':
+            self.path = '/index.html'
+        return super().do_GET()
 
     def do_POST(self):
         if self.path in ['/api/download', '/api/tiktok']:
