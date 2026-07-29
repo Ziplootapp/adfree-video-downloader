@@ -9,6 +9,13 @@ PORT = 3000
 DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 os.chdir(DIRECTORY)
 
+def format_url(path):
+    if not path:
+        return None
+    if path.startswith('http://') or path.startswith('https://'):
+        return path
+    return f"https://www.tikwm.com{path}"
+
 class ZipLootHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/' or self.path == '':
@@ -33,9 +40,9 @@ class ZipLootHandler(http.server.SimpleHTTPRequestHandler):
                             "platform": platform,
                             "title": d.get("title", "TikTok Video"),
                             "author": d.get("author", {}).get("unique_id", ""),
-                            "videoUrl": f"https://www.tikwm.com{d.get('play')}" if d.get('play') else None,
-                            "audioUrl": f"https://www.tikwm.com{d.get('music')}" if d.get('music') else None,
-                            "thumbnail": f"https://www.tikwm.com{d.get('cover')}" if d.get('cover') else None,
+                            "videoUrl": format_url(d.get('play')),
+                            "audioUrl": format_url(d.get('music')),
+                            "thumbnail": format_url(d.get('cover')),
                             "quality": "HD (No Watermark)"
                         }
                         self.send_response(200)
