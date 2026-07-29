@@ -3,26 +3,52 @@ import socketserver
 import json
 import urllib.request
 import urllib.parse
+import os
 
 PORT = 3000
+DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 
-class Handler(http.server.SimpleHTTPRequestHandler):
+class ZipLootHandler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=DIRECTORY, **kwargs)
+
     def do_POST(self):
-        if self.path == '/api/tiktok':
+        if self.path in ['/api/download', '/api/tiktok']:
             length = int(self.headers['Content-Length'])
             req_data = json.loads(self.rfile.read(length).decode('utf-8'))
             url = req_data.get('url', '')
+            platform = req_data.get('platform', 'tiktok')
             
-            req = urllib.request.Request(f"https://www.tikwm.com/api/?url={urllib.parse.quote(url)}")
-            with urllib.request.urlopen(req) as resp:
-                data = json.loads(resp.read().decode('utf-8'))
+            try:
+                apiUrl = f"https://www.tikwm.com/api/?url={urllib.parse.quote(url)}"
+                req = urllib.request.Request(apiUrl, headers={'User-Agent': 'Mozilla/5.0'})
+                with urllib.request.urlopen(req) as resp:
+                    res_json = json.loads(resp.read().decode('utf-8'))
+                    if res_json.get('code') == 0:
+                        d = res_json.get('data', {})
+                        result = {
+                            "platform": platform,
+                            "title": d.get("title", "TikTok Video"),
+                            "author": d.get("author", {}).get("unique_id", ""),
+                            "videoUrl": f"https://www.tikwm.com{d.get('play')}" if d.get('play') else None,
+                            "audioUrl": f"https://www.tikwm.com{d.get('music')}" if d.get('music') else None,
+                            "thumbnail": f"https://www.tikwm.com{d.get('cover')}" if d.get('cover') else None,
+                            "quality": "HD (No Watermark)"
+                        }
+                        self.send_response(200)
+                        self.send_header('Content-Type', 'application/json')
+                        self.end_headers()
+                        self.wfile.write(json.dumps(result).encode('utf-8'))
+                        return
+            except Exception as e:
+                pass
                 
-            self.send_response(200)
+            self.send_response(500)
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
-            self.wfile.write(json.dumps(data).encode('utf-8'))
+            self.wfile.write(json.dumps({"error": "Extraction failed. Check URL."}).encode('utf-8'))
 
-print(f"[SUCCESS] ZipLootDL Server running on http://localhost:{PORT}")
+print(f"[SUCCESS] ZipLootDL Web Downloader running on http://localhost:{PORT}")
 if __name__ == '__main__':
-    with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    with socketserver.TCPServer(("", PORT), ZipLootHandler) as httpd:
         httpd.serve_forever()
