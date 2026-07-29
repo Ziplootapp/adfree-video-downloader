@@ -2,6 +2,7 @@ import http.server
 import socketserver
 import json
 import urllib.request
+import urllib.parse
 
 PORT = 3000
 
@@ -21,6 +22,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps(data).encode('utf-8'))
 
-print(f"🚀 ZipLootDL Server running on http://localhost:{PORT}")
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
-    httpd.serve_forever()
+print(f"[SUCCESS] ZipLootDL Server running on http://localhost:{PORT}")
+if __name__ == '__main__':
+    with socketserver.TCPServer(("", PORT), Handler) as httpd:
+        httpd.serve_forever()
