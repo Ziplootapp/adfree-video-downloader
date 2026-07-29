@@ -4,13 +4,12 @@ $installDir = "$env:USERPROFILE\ZipLootDL"
 New-Item -ItemType Directory -Force -Path $installDir | Out-Null
 Set-Location $installDir
 
-# 1. Fetch server scripts
+# Fetch HEAD version to bypass CDN cache
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Write-Host "[*] Fetching ZipLootDL Server files..." -ForegroundColor Yellow
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Ziplootapp/adfree-video-downloader/main/server.js" -OutFile "$installDir\server.js"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Ziplootapp/adfree-video-downloader/main/server.py" -OutFile "$installDir\server.py"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Ziplootapp/adfree-video-downloader/HEAD/server.js" -OutFile "$installDir\server.js"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Ziplootapp/adfree-video-downloader/HEAD/server.py" -OutFile "$installDir\server.py"
 
-# 2. Runtime Check & Auto-Launch
 if (Get-Command node -ErrorAction SilentlyContinue) {
     Write-Host "[SUCCESS] Node.js runtime detected! Starting ZipLootDL Server on http://localhost:3000..." -ForegroundColor Green
     node "$installDir\server.js"
