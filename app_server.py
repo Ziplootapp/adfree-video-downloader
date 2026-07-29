@@ -53,5 +53,5 @@ class ZipLootHandler(http.server.SimpleHTTPRequestHandler):
 
 print(f"[SUCCESS] ZipLootDL Web Downloader running on http://localhost:{PORT}")
 if __name__ == '__main__':
-    with socketserver.TCPServer(("", PORT), ZipLootHandler) as httpd:
+    with http.server.ThreadingHTTPServer(("", PORT), ZipLootHandler) as httpd:
         httpd.serve_forever()
