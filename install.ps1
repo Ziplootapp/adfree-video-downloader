@@ -4,7 +4,9 @@ $installDir = "$env:USERPROFILE\ZipLootDL"
 New-Item -ItemType Directory -Force -Path $installDir | Out-Null
 Set-Location $installDir
 
-# Fetch HEAD version to bypass CDN cache
+Remove-Item "$installDir\server.js" -ErrorAction SilentlyContinue
+Remove-Item "$installDir\server.py" -ErrorAction SilentlyContinue
+
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Write-Host "[*] Fetching ZipLootDL Server files..." -ForegroundColor Yellow
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Ziplootapp/adfree-video-downloader/HEAD/server.js" -OutFile "$installDir\server.js"
