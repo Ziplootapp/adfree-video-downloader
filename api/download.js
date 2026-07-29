@@ -39,7 +39,13 @@ module.exports = async function handler(req, res) {
   }
 };
 
-// TIKTOK HANDLER
+function formatUrl(path) {
+  if (!path) return null;
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  return 'https://www.tikwm.com' + path;
+}
+
+// ========== TIKTOK HANDLER ==========
 async function handleTikTok(url) {
   const apiUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`;
 
@@ -63,15 +69,15 @@ async function handleTikTok(url) {
     platform: 'tiktok',
     title: data.title || 'TikTok Video',
     author: data.author?.unique_id || data.author?.nickname || '',
-    videoUrl: data.play ? `https://www.tikwm.com${data.play}` : null,
-    audioUrl: data.music ? `https://www.tikwm.com${data.music}` : null,
-    thumbnail: data.cover ? `https://www.tikwm.com${data.cover}` : null,
+    videoUrl: formatUrl(data.play),
+    audioUrl: formatUrl(data.music),
+    thumbnail: formatUrl(data.cover),
     quality: 'HD (No Watermark)',
     duration: data.duration || 0
   };
 }
 
-// INSTAGRAM HANDLER
+// ========== INSTAGRAM HANDLER ==========
 async function handleInstagram(url) {
   try {
     const result = await instagramGetUrl(url);
@@ -99,7 +105,7 @@ async function handleInstagram(url) {
   }
 }
 
-// TWITTER/X HANDLER
+// ========== TWITTER/X HANDLER ==========
 async function handleTwitter(url) {
   const match = url.match(/status\/(\d+)/);
   if (!match) throw new Error('Invalid Twitter/X URL. Please paste a tweet URL with a video.');
