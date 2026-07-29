@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZipLootDL — Ad-Free Video Downloader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div class="container">
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">ZipLoot<span class="logo-accent">DL</span></span>
+      </div>
+      <p class="tagline">Ad-Free Video Downloader — No Watermarks, No Redirects, No API Keys</p>
+    </header>
+
+    <div class="platform-pills">
+      <span class="pill active" data-platform="all">All Platforms</span>
+      <span class="pill" data-platform="tiktok">TikTok</span>
+      <span class="pill" data-platform="instagram">Instagram</span>
+      <span class="pill" data-platform="twitter">Twitter/X</span>
+    </div>
+
+    <div class="input-section">
+      <div class="input-wrapper">
+        <input type="text" id="videoUrl" placeholder="Paste TikTok, Instagram, or Twitter/X video link here..." autocomplete="off">
+        <button id="downloadBtn" onclick="handleDownload()">
+          <span class="btn-text">Download</span>
+          <span class="btn-loader" style="display:none;"><span class="spinner"></span></span>
+        </button>
+      </div>
+      <p class="input-hint">Supports: TikTok videos (no watermark), Instagram Reels/Posts, Twitter/X videos</p>
+    </div>
+
+    <div id="errorAlert" class="alert alert-error" style="display:none;">
+      <span class="alert-icon">⚠️</span>
+      <span id="errorText"></span>
+    </div>
+
+    <div id="resultCard" class="result-card" style="display:none;">
+      <div class="result-header">
+        <div class="result-platform" id="resultPlatform">
+          <span class="platform-badge"></span>
+        </div>
+        <span class="result-quality" id="resultQuality">HD</span>
+      </div>
+
+      <div class="video-preview" id="videoPreview">
+        <video id="previewPlayer" controls playsinline preload="metadata"></video>
+      </div>
+
+      <div class="thumb-preview" id="thumbPreview" style="display:none;">
+        <img loading="lazy" id="thumbImg" alt="Video Thumbnail">
+      </div>
+
+      <div class="result-info">
+        <h3 id="videoTitle" class="video-title"></h3>
+        <p id="videoAuthor" class="video-author"></p>
+      </div>
+
+      <div class="download-actions">
+        <a id="dlVideo" class="dl-btn dl-video" href="#" target="_blank" rel="noopener">Download Video (MP4)</a>
+        <a id="dlAudio" class="dl-btn dl-audio" href="#" target="_blank" rel="noopener" style="display:none;">Download Audio (MP3)</a>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Free Forever</span></div>
+      <div class="stat"><span class="stat-num">0</span><span class="stat-label">Ads & Popups</span></div>
+      <div class="stat"><span class="stat-num">3+</span><span class="stat-label">Platforms</span></div>
+      <div class="stat"><span class="stat-num">HD</span><span class="stat-label">Quality</span></div>
+    </div>
+
+    <footer class="footer">
+      <p>Built with ⚡ by <a href="https://ziploot.vercel.app" target="_blank">ZipLoot</a> — Open Source, Ad-Free, Forever Free</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
